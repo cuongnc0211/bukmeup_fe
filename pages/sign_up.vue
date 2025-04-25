@@ -1,5 +1,6 @@
 <script setup>
   const route = useRoute();
+  const auth = useAuthStore()
 
   const error = ref(null)
 
@@ -25,14 +26,19 @@
       }
     })
 
-    debugger
     if (signupError.value) {
       error.value = signupError.value.data.error_description || 'Signup failed'
       return
     }
 
     const token = data.value.token
-    localStorage.setItem('auth_token', token)
+    const user = data.value.resource_owner
+
+    auth.setToken(token)
+    auth.setUser(user)
+
+    // redirect to verify email page
+    router.push('/verify_email')
   }
 </script>
 
